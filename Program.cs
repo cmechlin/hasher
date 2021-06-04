@@ -1,13 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using System.Activities;
-using System.Activities.Statements;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace Hasher
 {
@@ -123,11 +119,13 @@ namespace Hasher
             string d = DateTime.Now.ToString("MM/dd/yy");
             string t = DateTime.Now.ToString("hh:mm:ss");
             string f = Path.GetFileName(path);
+            string[] Separator = { "PLC" };
+            string logFilename = f.Split(Separator, StringSplitOptions.None).First() + "log";
             string p = Path.GetDirectoryName(path);
             string fcreated = File.GetCreationTime(path).ToString();
             string fmodified = File.GetLastWriteTime(path).ToString();
             string s = String.Format("{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}\n", d, t, p, f, fcreated, fmodified, md5, sha1);
-            path = @Path.ChangeExtension(path, ".csv");
+            path = @Path.Combine(p, Path.ChangeExtension(logFilename, ".csv"));
             if (!File.Exists(path))
             {
                 File.AppendAllText(path, "Current Date, Current Time, Path, File Name, Creation DateTime, Modified DateTime, MD5 Hash, SHA-1 Hash\n");
